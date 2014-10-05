@@ -5,6 +5,10 @@ import "log"
 import "fmt"
 import "bytes"
 
+// The beginnings of a tail(1) clone, for the purpose of learning Go.
+//
+// Currently it tries to find the 10 last lines in a file, and gets 7
+// instead. Oops.
 func main() {
 	filename := os.Args[1]
 	cursor, err := newLineCursor(filename)
@@ -49,11 +53,14 @@ func (cur *lineCursor) Prev(n int64) (err error){
 	step := int64(n * -64)
 	targetOffset := cur.lineOffset - n - 1
 	for cur.lineOffset > targetOffset && cur.byteOffset > 0 {
-		newOffset, err := cur.file.Seek(cur.byteOffset + step, os.SEEK_SET)
+		// make the dubious assumption that we are currently sitting on an
+		// ending newline and so we need to back up one byte
+		chunkEndOffset := cur.byteOffset - 1
+		newOffset, err := cur.file.Seek(chunkEndOffset + step, os.SEEK_SET)
 		if err != nil {
 			return err
 		}
-		chunk := make([]byte, cur.byteOffset - newOffset)
+		chunk := make([]byte, chunkEndOffset - newOffset)
 		_, err = cur.file.Read(chunk)
 		if err != nil {
 			return err
