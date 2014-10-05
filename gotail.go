@@ -9,6 +9,15 @@ import "bytes"
 //
 // Currently it tries to find the 10 last lines in a file, and gets 7
 // instead. Oops.
+//
+// Note to the reader: apart from fixing the bug above, I'm more
+// interested in critiques of my use of Go style, idiom, and language
+// features than in critiques of my algorithm. For instance, yes I'm
+// aware you can write this in a lot fewer lines if you read whole
+// files into memory first. I am trying here to be faithful to the GNU
+// and BSD implementations, which strive to be efficient by (among
+// other things), not linking memory use to the size of the input
+// files.
 func main() {
 	filename := os.Args[1]
 	cursor, err := newLineCursor(filename)
