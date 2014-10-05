@@ -16,7 +16,7 @@ import "bytes"
 // aware you can write this in a lot fewer lines if you read whole
 // files into memory first. I am trying here to be faithful to the GNU
 // and BSD implementations, which strive to be efficient by (among
-// other things), not linking memory use to the size of the input
+// other things, not linking memory use to the size of the input
 // files.
 func main() {
 	filename := os.Args[1]
